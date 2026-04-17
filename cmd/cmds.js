@@ -1,5 +1,5 @@
 module.exports = function(bot, db, config, client) {
-  bot.onText(/^[./]cmds$/, async (msg) => {
+  bot.onText(/^[./]cmds(?:@\w+)?$/, async (msg) => {
     const chatId = msg.chat.id;
     const fromId = msg.from.id;
 
@@ -15,6 +15,7 @@ module.exports = function(bot, db, config, client) {
 /info <code>[id/@]</code> - Ver perfil detallado.
 /tratoadmin - Solicitar administrador.
 /report <code>[msj]</code> - Reportar.
+/reglas - Ver reglas del grupo.
 `.trim();
 
     
@@ -28,41 +29,23 @@ module.exports = function(bot, db, config, client) {
         if (found) userRole = found.role;
     }
 
-    const isStaff = ['admin', 'quemador', 'certificado'].includes(userRole);
+    const isStaff = ['admin', 'quemador'].includes(userRole);
 
-    
+    let finalMsg = helpMsg;
+
     if (isStaff || isOwner1 || isOwner2) {
-      helpMsg += `
-
-<b>REPORTAR:</b>
-/rata <code>[id/@] [razón]</code> - Reportar estafador.
-/delrata <code>[id/@]</code> - Limpiar reporte.
-`.trim();
+      finalMsg += `\n\n<b>REPORTAR:</b>\n/rata <code>[id/@] [razón]</code> - Reportar estafador.\n/ratas - Ver lista de estafadores.\n/delrata <code>[id/@]</code> - Limpiar reporte.`;
     }
 
-    
     if (isOwner1 || isOwner2) {
-      helpMsg += `
-
-<b>MOD:</b>
-/rol <code>[rango] [id/@]</code> - Asignar roles.
-  (admin, certificado, quemador, nada)
-`.trim();
+      finalMsg += `\n\n<b>MOD:</b>\n/rol <code>[rango] [id/@]</code> - Asignar roles.\n  (admin, certificado, quemador, nada)\n/antilink <code>[on/off]</code> - Control de links.\n/mute <code>[id/@]</code> - Silenciar usuario.\n/unmute <code>[id/@]</code> - Quitar silencio.\n/adrules - Configurar reglas (respondiendo).`;
     }
 
-    
     if (isOwner1) {
-      helpMsg += `
-
-<b>OWNER PRINCIPAL:</b>
-/promote <code>[id/@]</code> - Dar admin en grupo.
-/rol <code>[owner/owner2]</code> - Gestionar jerarquía.
-`.trim();
+      finalMsg += `\n\n<b>OWNER PRINCIPAL:</b>\n/promote <code>[id/@]</code> - Dar admin en grupo.\n/rol <code>[owner/owner2]</code> - Gestionar jerarquía.`;
     }
 
-    helpMsg += `\n`.trim();
-
-    await bot.sendMessage(chatId, helpMsg, { 
+    await bot.sendMessage(chatId, finalMsg, { 
       parse_mode: 'HTML',
       reply_to_message_id: msg.message_id 
     });

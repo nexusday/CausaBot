@@ -47,7 +47,7 @@ module.exports = function(bot, db, config, client) {
             String(u.id) === query
           );
           if (found) targetUser = found;
-          else return bot.sendMessage(chatId, `❌ **No encontrado:** <code>${query}</code>`, { parse_mode: 'HTML' });
+          else return bot.sendMessage(chatId, `[!] No encontrado: <code>${query}</code>`, { parse_mode: 'HTML' });
         }
       } 
       else {

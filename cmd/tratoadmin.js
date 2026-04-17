@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function(bot, db, config, client) {
-  bot.onText(/^[./]tratoadmin$/, async (msg) => {
+  bot.onText(/^[./]tratoadmin(?:@\w+)?$/, async (msg) => {
     const chatId = msg.chat.id;
     const rolesPath = path.join(__dirname, '..', 'database', 'json', 'roles.json');
 
     if (!fs.existsSync(rolesPath)) {
-      return bot.sendMessage(chatId, "<b>[⚙️]</b> No hay administradores disponibles en este momento.", { parse_mode: 'HTML' });
+      return bot.sendMessage(chatId, "<b>[!]</b> No hay administradores disponibles en este momento.", { parse_mode: 'HTML' });
     }
 
     try {
@@ -16,7 +16,7 @@ module.exports = function(bot, db, config, client) {
       const admins = rolesData.filter(u => u.role === 'admin');
 
       if (admins.length === 0) {
-        return bot.sendMessage(chatId, "<b>[⚙️]</b> No hay administradores registrados para atender tratos.", { parse_mode: 'HTML' });
+        return bot.sendMessage(chatId, "<b>[!]</b> No hay administradores registrados para atender tratos.", { parse_mode: 'HTML' });
       }
 
       

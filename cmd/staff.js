@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function(bot, db, config, client) {
-  bot.onText(/^[./]staff$/, async (msg) => {
+  bot.onText(/^[./]staff(?:@\w+)?$/, async (msg) => {
     const chatId = msg.chat.id;
     const rolesPath = path.join(__dirname, '..', 'database', 'json', 'roles.json');
 

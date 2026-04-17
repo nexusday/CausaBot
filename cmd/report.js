@@ -17,6 +17,7 @@ module.exports = function(bot, db, config, client) {
 
     const reportedMsg = msg.reply_to_message;
     const reportedUser = reportedMsg.from;
+    const messageLink = msg.chat.username ? `https://t.me/${msg.chat.username}/${reportedMsg.message_id}` : `https://t.me/c/${String(chatId).replace("-100", "")}/${reportedMsg.message_id}`;
 
     // Obtener destinatarios: owners de config y admins de roles.json
     const recipients = new Set();
@@ -55,6 +56,8 @@ module.exports = function(bot, db, config, client) {
 
 <b>Mensaje Reportado:</b>
 <i>"${reportedMsg.text || '[Contenido Multimedia]'}"</i>
+
+<b>Enlace al mensaje:</b> <a href="${messageLink}">Ver en el grupo</a>
 `.trim();
 
     
@@ -62,11 +65,11 @@ module.exports = function(bot, db, config, client) {
     for (const adminId of recipients) {
       try {
         await bot.sendMessage(adminId, reportForAdmins, { parse_mode: 'HTML' });
-        // Intentar reenviar el mensaje original para contexto
+        
         await bot.forwardMessage(adminId, chatId, reportedMsg.message_id);
         sentCount++;
       } catch (e) {
-        // El bot no puede enviar mensajes a usuarios que no hayan iniciado chat con él
+        
         console.error(`Error enviando reporte a ${adminId}:`, e.message);
       }
     }

@@ -20,7 +20,7 @@ module.exports = function(bot, db, config, client) {
     
     const isOwner1 = config.admins.includes(fromId);
     const isOwner2 = config.admins2 && config.admins2.includes(fromId);
-    const hasSpecialRole = ['admin', 'quemador', 'certificado'].includes(userRole);
+    const hasSpecialRole = ['admin', 'quemador'].includes(userRole);
 
     if (!isOwner1 && !isOwner2 && !hasSpecialRole) return;
 
@@ -71,6 +71,13 @@ module.exports = function(bot, db, config, client) {
 
       const targetIdStr = String(target.id);
       const reportIndex = ratasData.findIndex(r => String(r.id) === targetIdStr);
+
+      if (reportIndex !== -1) {
+        return bot.sendMessage(chatId, `<b>[!] Aviso:</b> El usuario con ID <code>${targetIdStr}</code> ya se encuentra en la lista de estafadores.\n\n<b>Motivo actual:</b> <code>${ratasData[reportIndex].reason}</code>`, { 
+          parse_mode: 'HTML', 
+          reply_to_message_id: msg.message_id 
+        });
+      }
 
       const reportEntry = {
         id: targetIdStr,
@@ -123,7 +130,7 @@ module.exports = function(bot, db, config, client) {
     
     const isOwner1 = config.admins.includes(fromId);
     const isOwner2 = config.admins2 && config.admins2.includes(fromId);
-    const hasSpecialRole = ['admin', 'quemador', 'certificado'].includes(userRole);
+    const hasSpecialRole = ['admin', 'quemador'].includes(userRole);
 
     if (!isOwner1 && !isOwner2 && !hasSpecialRole) return;
 

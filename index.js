@@ -96,6 +96,17 @@ const stringSession = new StringSession(config.session || "");
     });
   }
 
+  // Cargar sistema de Antis (Eventos)
+  const antisFile = path.join(__dirname, 'antis.js');
+  if (fs.existsSync(antisFile)) {
+    try {
+      require(antisFile)(bot, db, config, client);
+      console.log("Sistema Anti-links cargado ✅");
+    } catch (err) {
+      console.warn("Error cargando antis.js:", err.message);
+    }
+  }
+
   console.log(`${config.botName || 'Bot'} (Bot API) iniciado.`);
 })();
 

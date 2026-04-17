@@ -53,6 +53,23 @@ module.exports = function(bot, db, config, client) {
     }
 
     
+    const botId = bot.token.split(':')[0];
+    if (String(targetUserId) === String(botId)) {
+        return bot.sendMessage(chatId, "<b>[!] Error:</b> No me puedo banear a mí mismo.", { 
+            parse_mode: 'HTML',
+            reply_to_message_id: msg.message_id 
+        });
+    }
+
+    
+    if (String(targetUserId) === String(userId)) {
+        return bot.sendMessage(chatId, "<b>[!] Error:</b> No puedes banearte a ti mismo.", { 
+            parse_mode: 'HTML',
+            reply_to_message_id: msg.message_id 
+        });
+    }
+
+    
     try {
       await bot.banChatMember(chatId, targetUserId);
       bot.sendMessage(chatId, `<b>¡USUARIO BANEADO!</b>\n\n<b>Usuario:</b> ${targetUsername}\n<b>Por orden de:</b> <a href="tg://user?id=${userId}">${msg.from.first_name}</a>`, {
@@ -60,10 +77,16 @@ module.exports = function(bot, db, config, client) {
         reply_to_message_id: msg.message_id
       });
     } catch (err) {
-      if (err.message.includes("admin privileges")) {
-        bot.sendMessage(chatId, "[!] No puedo banear a ese usuario. Verifica que sea un administrador y que el objetivo no sea otro administrador.");
+      if (err.message.includes("is an administrator") || err.message.includes("admin privileges")) {
+        bot.sendMessage(chatId, "<b>[!] Error:</b> Ese usuario es administrador, no se puede banear.", { 
+          parse_mode: 'HTML',
+          reply_to_message_id: msg.message_id 
+        });
       } else {
-        bot.sendMessage(chatId, `[!] Error al banear: ${err.message}`);
+        bot.sendMessage(chatId, `<b>[!] Error al banear:</b> <code>${err.message}</code>`, { 
+          parse_mode: 'HTML',
+          reply_to_message_id: msg.message_id 
+        });
       }
     }
   });
