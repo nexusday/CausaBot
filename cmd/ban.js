@@ -1,5 +1,5 @@
 module.exports = function(bot, db, config, client) {
-  bot.onText(/^[./]ban(?:\s+(.+))?$/, async (msg, match) => {
+  bot.onText(/^[./](?:ban|kick)(?:\s+(.+))?$/, async (msg, match) => {
     const chatId = msg.chat.id;
     const userId = msg.from.id;
 

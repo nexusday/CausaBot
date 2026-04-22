@@ -38,7 +38,7 @@ module.exports = function(bot, db, config, client) {
     }
 
     if (isOwner1 || isOwner2) {
-      finalMsg += `\n\n<b>MOD:</b>\n/rol <code>[rango] [id/@]</code> - Asignar roles.\n  (admin, certificado, quemador, nada)\n/antilink <code>[on/off]</code> - Control de links.\n/mute <code>[id/@]</code> - Silenciar usuario.\n/unmute <code>[id/@]</code> - Quitar silencio.\n/adrules - Configurar reglas (respondiendo).`;
+      finalMsg += `\n\n<b>MOD:</b>\n/rol <code>[rango] [id/@]</code> - Asignar roles.\n  (admin, certificado, quemador, nada)\n/antilink <code>[on/off]</code> - Control de links.\n/mute <code>[id/@]</code> - Silenciar usuario.\n/unmute <code>[id/@]</code> - Quitar silencio.\n/del - Eliminar mensaje (respondiendo).\n/adrules - Configurar reglas (respondiendo).`;
     }
 
     if (isOwner1) {
